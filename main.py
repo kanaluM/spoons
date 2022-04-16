@@ -5,12 +5,12 @@ from sources.Decks import Decks
 from sources.Game import Game
 
 random.seed(42)
-NUM_SIMULATION = 1_000
+NUM_SIMULATION = 2_500
 
-game = Game()
+game = Game(["RAND"]*4)
 for n in range(NUM_SIMULATION + 1):
-    if n % 50 == 0:
-        print(n, game.history)
     game.initialize_game()
     game.play()
+    
+x = game.print_game_record()
     

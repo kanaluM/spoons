@@ -1,13 +1,17 @@
 from sources.Player import Player
 from sources.Decks import Decks
+from sources.Game_History import Game_History
 
 class Game(object):
-    "Spoon game model"
-    
+    """
+    An object that can be used to simulate a game of spoon
+    """
+    MAX_NUMBER_TURNS = 1_000_000
+ 
     def __init__(self, player_strategy = ["GREEDY"]*4):
         self.player_strategy = player_strategy
-        self.history = [0]*len(player_strategy)
-
+        self.history = Game_History(self.player_strategy)
+        
     def initialize_game(self):
         self.deck = Decks()    
         self.player_list = [Player(strat) for strat in self.player_strategy]
@@ -17,10 +21,9 @@ class Game(object):
                 player.add_card(self.deck.next_card())
 
     def play(self) -> int: 
-        MAX_NUMBER_TURNS = 1_000_000
-        for n in range(MAX_NUMBER_TURNS):
+        for n in range(self.MAX_NUMBER_TURNS):
             if self.check_winner():
-                self.history[self.get_winner()] += 1
+                self.history.update(self.get_winner())
                 break
 
             next_card = self.deck.next_card()
@@ -41,4 +44,6 @@ class Game(object):
                 return idx
         print("invalid use of the function get_winner")
         return -1
-        
+    
+    def print_game_record(self) -> None:
+        self.history.win_rates_over_time()
