@@ -1,6 +1,7 @@
 from sources.Player import Player
 from sources.Decks import Decks
 from sources.Game_History import Game_History
+import matplotlib.pyplot as plt
 
 class Game(object):
     """
@@ -11,6 +12,7 @@ class Game(object):
     def __init__(self, player_strategy = ["GREEDY"]*4):
         self.player_strategy = player_strategy
         self.history = Game_History(self.player_strategy)
+        self.turns = 0
         
     def initialize_game(self):
         self.deck = Decks()    
@@ -22,6 +24,7 @@ class Game(object):
 
     def play(self) -> int: 
         for n in range(self.MAX_NUMBER_TURNS):
+            self.turns += 1
             if self.check_winner():
                 self.history.update(self.get_winner())
                 break
@@ -47,3 +50,25 @@ class Game(object):
     
     def print_game_record(self) -> None:
         self.history.win_rates_over_time()
+
+    def player_freq(self, playerIndex) -> None:
+        p = self.player_list[playerIndex]
+        xData = list(range(1,self.turns+1))
+        yData = p.getFreq()
+        plt.plot(xData, yData)
+        plt.title("Highest Card Frequency vs Turns")
+        plt.xlabel("Turn #")
+        plt.ylabel("Highest Current Frequency")
+        plt.show()
+
+    def player_unique(self, playerIndex) -> None:
+        p = self.player_list[playerIndex]
+        xData = list(range(1,self.turns+1))
+        yData = p.getUnique()
+        plt.plot(xData, yData)
+        plt.title("Cards Seen Over Time")
+        plt.xlabel("Turn #")
+        plt.ylabel("# Cards Seen")
+        plt.show()
+
+    
