@@ -1,13 +1,4 @@
-# -*- coding: utf-8 -*-
 from collections import Counter
-
-"""
-from enum import Enum
-
-class Strategy(Enum):
-    GREED = greedy_decision
-"""  
-
 import random
 
 PLAYER_MEMORY = 7
@@ -157,17 +148,16 @@ def discard_history_wild_N(hand, history, wanted_card = None):
         return discard_history_basic_N(hand, history, wanted_card)
     
 ### MOVE FUNCTION ###
-def strat(hand, history, freq, next_card, discard_strat = discard_no_history):
+def strat(hand, history, next_card, discard_strat = discard_no_history):
     frequency = Counter(hand)
     wanted_card, wanted_frequency = frequency.most_common(1)[0]
-    freq += [wanted_frequency]
     
     hand.append(next_card)
     discard_card = discard_strat(hand, history, wanted_card)
     hand.remove(discard_card)
 
     update_player_history(history, discard_card)  
-    return (hand, history, freq, discard_card)
+    return (hand, history, discard_card)
 
 decision_dictionary = {"RAND": discard_random,
                        "GREEDY_SIMPLE": discard_no_history,

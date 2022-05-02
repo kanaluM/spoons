@@ -26,7 +26,8 @@ class Game(object):
         for n in range(self.MAX_NUMBER_TURNS):
             self.turns += 1
             if self.check_winner():
-                self.history.update(self.get_winner())
+                self.history.update(self.get_winner(), self.turns)
+                self.turns = 0
                 break
 
             next_card = self.deck.next_card()
@@ -34,6 +35,7 @@ class Game(object):
                 next_card = player.move(next_card)
 
             self.deck.update_discard_pile(next_card)
+        self.turns = 0
 
     def check_winner(self) -> bool:
         for idx, player in enumerate(self.player_list):
@@ -51,24 +53,5 @@ class Game(object):
     def print_game_record(self) -> None:
         self.history.win_rates_over_time()
 
-    def player_freq(self, playerIndex) -> None:
-        p = self.player_list[playerIndex]
-        xData = list(range(1,self.turns+1))
-        yData = p.getFreq()
-        plt.plot(xData, yData)
-        plt.title("Highest Card Frequency vs Turns")
-        plt.xlabel("Turn #")
-        plt.ylabel("Highest Current Frequency")
-        plt.show()
-
-    def player_unique(self, playerIndex) -> None:
-        p = self.player_list[playerIndex]
-        xData = list(range(1,self.turns+1))
-        yData = p.getUnique()
-        plt.plot(xData, yData)
-        plt.title("Cards Seen Over Time")
-        plt.xlabel("Turn #")
-        plt.ylabel("# Cards Seen")
-        plt.show()
-
-    
+    def print_turn_record(self) -> None:
+        print(self.history.plotTurns())

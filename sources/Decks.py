@@ -1,5 +1,4 @@
 import random
-from functools import reduce
 
 class Decks(object):
     """A class for a deck of cards"""
